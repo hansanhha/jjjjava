@@ -1,0 +1,17 @@
+plugins {
+    id 'jjjjava.common'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+        sourceCompatibility = JavaLanguageVersion.of(11)
+        targetCompatibility = JavaLanguageVersion.of(11)
+    }
+}
+
+group = 'hsh.demo'
+
+test {
+    useJUnitPlatform()
+}
