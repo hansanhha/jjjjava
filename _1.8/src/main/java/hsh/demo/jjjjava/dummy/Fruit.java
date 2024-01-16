@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Fruit {
 
-    protected int price;
+    protected Integer price;
     protected LocalDateTime expiredDate;
     protected Type type;
 
@@ -28,7 +28,7 @@ public class Fruit {
         this.type = type;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -38,6 +38,10 @@ public class Fruit {
 
     public Type getType() {
         return type;
+    }
+
+    public static int compareByPrice(Fruit a, Fruit b) {
+        return a.price.compareTo(b.price);
     }
 
     @Override
