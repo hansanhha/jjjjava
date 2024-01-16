@@ -3,16 +3,21 @@ package hsh.demo.jjjjava.feature;
 import hsh.demo.jjjjava.dummy.Apple;
 import hsh.demo.jjjjava.dummy.Box;
 import hsh.demo.jjjjava.dummy.Fruit;
+import hsh.demo.jjjjava.dummy.Orange;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class TerminalStreamAPI {
 
     static Box<Apple> busanAppleBox;
     static Box<Apple> seoulAppleBox;
+
+    static Box<Orange> jejuOrangeBox;
 
     static {
         LocalDateTime busanAppleExpiredDate = LocalDateTime.of(2024, 5, 26, 0, 0);
@@ -25,6 +30,11 @@ class TerminalStreamAPI {
         int seoulApplePrice = 2000;
         int seoulAppleVitaminA = 100;
         int seoulAppleVitaminB = 100;
+
+        LocalDateTime jejuOrangeExpiredDate = LocalDateTime.of(2024, 5, 26, 0, 0);
+        int jejuOrangePrice = 1000;
+        int jejuOrangeVitaminC = 100;
+        int jejuOrangeVitaminD = 100;
 
         busanAppleBox = new Box<>(Arrays.asList(
                 new Apple(busanApplePrice, busanAppleExpiredDate, busanAppleVitaminC, busanAppleVitaminB),
@@ -42,28 +52,46 @@ class TerminalStreamAPI {
                 new Apple(seoulApplePrice, seoulAppleExpiredDate2, seoulAppleVitaminA, seoulAppleVitaminB),
                 new Apple(seoulApplePrice, seoulAppleExpiredDate2, seoulAppleVitaminA, seoulAppleVitaminB)
         ));
+
+        jejuOrangeBox = new Box<>(Arrays.asList(
+                new Orange(jejuOrangePrice, jejuOrangeExpiredDate, jejuOrangeVitaminC, jejuOrangeVitaminD),
+                new Orange(jejuOrangePrice, jejuOrangeExpiredDate, jejuOrangeVitaminC, jejuOrangeVitaminD),
+                new Orange(jejuOrangePrice, jejuOrangeExpiredDate, jejuOrangeVitaminC, jejuOrangeVitaminD),
+                new Orange(jejuOrangePrice, jejuOrangeExpiredDate, jejuOrangeVitaminC, jejuOrangeVitaminD),
+                new Orange(jejuOrangePrice, jejuOrangeExpiredDate, jejuOrangeVitaminC, jejuOrangeVitaminD)
+        ));
     }
 
     public static void main(String[] args) {
         System.out.println("1.8 - Stream");
 
-        System.out.println("===busan apple box===");
+        printAppleType();
+
+        System.out.println("===busan apple box 유통기한===");
         printFruitExpireDate(busanAppleBox);
 
-        System.out.println("===seoul apple box===");
+        System.out.println("===seoul apple box 유통기한===");
         printFruitExpireDate(seoulAppleBox);
-
-        int busanAppleBoxPrice = getBoxPrice(busanAppleBox);
-        int seoulAppleBoxPrice = getBoxPrice(seoulAppleBox);
-
-        print("===busan apple box 가격===", busanAppleBoxPrice);
-        print("===seoul apple box 가격===", seoulAppleBoxPrice);
 
         System.out.println("===seoul apple box 최대 유통기한===");
         printMaxExpiredDate(seoulAppleBox);
 
         System.out.println("===seoul apple box 최소 유통기한===");
         printMinExpiredDate(seoulAppleBox);
+
+        int busanAppleBoxPrice = getBoxPrice(busanAppleBox);
+        int seoulAppleBoxPrice = getBoxPrice(seoulAppleBox);
+        print("===busan apple box 가격===", busanAppleBoxPrice);
+        print("===seoul apple box 가격===", seoulAppleBoxPrice);
+
+        System.out.println("===과일 별 가장 비싼 가격===");
+        printMaxPriceBoxByGroup(busanAppleBox, seoulAppleBox, jejuOrangeBox);
+
+        System.out.println("===과일 별 유통기한===");
+        printExpiredDateBoxByGroup(busanAppleBox, seoulAppleBox, jejuOrangeBox);
+
+        System.out.println("===2000원 이하의 가격을 가진 과일 개수===");
+        printFruitCountByGroupAndPrice(2000, busanAppleBox, seoulAppleBox, jejuOrangeBox);
     }
 
     /*
@@ -76,6 +104,7 @@ class TerminalStreamAPI {
         item.stream()
             .map(Fruit::getExpiredDate)
             .forEach(System.out::println);
+        System.out.println();
     }
 
     /*
@@ -116,21 +145,107 @@ class TerminalStreamAPI {
                 .get();
 
         System.out.println(result.getExpiredDate());
+        System.out.println();
     }
 
+    /*
+        Collectors.maxBy()
+     */
     private static <T extends Fruit> void printMinExpiredDate(Box<T> box) {
         List<T> item = box.getItem();
 
-        T result = item.stream()
-                .reduce((a, b) -> a.getExpiredDate().isBefore(b.getExpiredDate()) ? a : b)
-                .get();
+        Optional<LocalDateTime> maxExpiredDate = item.stream()
+                .map(Fruit::getExpiredDate)
+                .collect(Collectors.maxBy(LocalDateTime::compareTo));
 
-        System.out.println(result.getExpiredDate());
+        System.out.println(maxExpiredDate.get());
+        System.out.println();
+    }
+
+    /*
+        Collectors.groupingBy()
+        특정 기준으로 그룹화, 두 번째 매개변수로 추가 연산 가능(Collector)
+        과일 종류별로 가장 비싼 가격 그룹화 (사과 : 2000원, 오렌지 : 1000원 등)
+     */
+    @SafeVarargs
+    private static void printMaxPriceBoxByGroup(Box<? extends Fruit> ... boxes) {
+        Map<Fruit.Type, ? extends Optional<? extends Fruit>> result = Arrays.stream(boxes)
+                .flatMap(box -> box.getItem().stream())
+                .collect(Collectors.groupingBy(Fruit::getType,
+                        Collectors.maxBy(Comparator.comparingInt(Fruit::getPrice))));
+
+        for (Fruit.Type type : result.keySet()) {
+            System.out.println("가장 비싼 " + type.getName() + "의 가격");
+            System.out.println(result.get(type).get().getPrice() + "원");
+            System.out.println();
+        }
+    }
+
+    /*
+        Collectors.groupingBy()
+        다수준의 그룹화 가능
+        과일 종류별로 유통기한 그룹화 (사과, 2024-05-26(일) : 5개 등)
+     */
+    @SafeVarargs
+    private static void printExpiredDateBoxByGroup(Box<? extends Fruit> ... boxes) {
+        Map<Fruit.Type, Map<LocalDateTime, Long>> result = Arrays.stream(boxes)
+                .flatMap(box -> box.getItem().stream())
+                .collect(Collectors.groupingBy(Fruit::getType,
+                        Collectors.groupingBy(Fruit::getExpiredDate, Collectors.counting())));
+
+        for (Fruit.Type type : result.keySet()) {
+            System.out.println(type.getName());
+
+            Map<LocalDateTime, Long> expiredMap = result.get(type);
+
+            for (LocalDateTime expiredDate : expiredMap.keySet()) {
+                Long count = expiredMap.get(expiredDate);
+                String formatted = expiredDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd(E)").withLocale(Locale.KOREA));
+
+                System.out.println(formatted + " : " + count + "개");
+            }
+            System.out.println();
+        }
+    }
+
+    /*
+        Collectors.partitioningBy()
+        특정 조건으로 분할(무조건 2개)
+        과일 종류별로 조건 이하의 가격을 가진 과일 개수 구하기
+     */
+    @SafeVarargs
+    private static void printFruitCountByGroupAndPrice(int price, Box<? extends Fruit> ... boxes) {
+        Map<Fruit.Type, Map<Boolean, Long>> result = Arrays.stream(boxes)
+                .flatMap(box -> box.getItem().stream())
+                .collect(Collectors.groupingBy(Fruit::getType,
+                        Collectors.partitioningBy(item -> item.getPrice() <= price, Collectors.counting())));
+
+        for (Fruit.Type type : result.keySet()) {
+            Map<Boolean, Long> lowerPriceMap = result.get(type);
+
+            Long count = lowerPriceMap.get(true);
+
+            System.out.println(type.getName() + " : " + count + "개");
+        }
+    }
+
+    /*
+        Collectors.joining()
+        문자열 합치기 연산(delimiter, prefix, suffix 사용 가능)
+     */
+    private static void printAppleType() {
+        List<String> appleTypes = Arrays.asList("busan apple", "seoul apple");
+
+        String result = appleTypes.stream()
+                .collect(Collectors.joining(", "));
+
+        print("===apple type===", result);
     }
 
     private static <T> void print(String message, T value) {
         System.out.println(message);
         System.out.println(value);
+        System.out.println();
     }
 
 }

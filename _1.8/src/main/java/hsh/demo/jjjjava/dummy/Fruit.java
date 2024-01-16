@@ -6,10 +6,26 @@ public class Fruit {
 
     protected int price;
     protected LocalDateTime expiredDate;
+    protected Type type;
 
-    protected Fruit(int price, LocalDateTime expiredDate) {
+    public enum Type {
+        APPLE("사과"), ORANGE("오렌지");
+
+        private final String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    protected Fruit(int price, LocalDateTime expiredDate, Type type) {
         this.price = price;
         this.expiredDate = expiredDate;
+        this.type = type;
     }
 
     public int getPrice() {
@@ -18,6 +34,10 @@ public class Fruit {
 
     public LocalDateTime getExpiredDate() {
         return expiredDate;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     @Override

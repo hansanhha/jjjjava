@@ -8,7 +8,7 @@ public class Orange extends Fruit {
     int vitaminD;
 
     public Orange(int price, LocalDateTime expiredDate, int vitaminC, int vitaminD) {
-        super(price, expiredDate);
+        super(price, expiredDate, Type.ORANGE);
         this.vitaminC = vitaminC;
         this.vitaminD = vitaminD;
     }

@@ -9,7 +9,6 @@ public class Box<T extends Fruit> {
 
     public Box(List<T> item) {
         Objects.requireNonNull(item);
-        System.out.println("Fruit Box Size : " + item.size());
         this.item = item;
     }
 
