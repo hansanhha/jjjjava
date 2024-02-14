@@ -59,7 +59,7 @@ spring6, springboot3
 Sealed Classes  
 Pseudo random number API  
 
-**(21)[_21]** ~2031  
+**[21](_21)** ~2031  
 (Java 18)  
 UTF-8 by default  
 Simple Web Server  
