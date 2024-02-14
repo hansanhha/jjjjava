@@ -1,7 +1,16 @@
 plugins {
-    id "groovy-gradle-plugin"
+    id "java-gradle-plugin"
 }
 
 repositories {
     gradlePluginPortal()
+}
+
+gradlePlugin {
+    plugins {
+        junit {
+            id = "com.hansanhha.java.conventions"
+            implementationClass = "com.hansanhha.java.JavaConventions"
+        }
+    }
 }

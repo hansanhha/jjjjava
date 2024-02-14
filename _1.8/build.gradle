@@ -1,17 +1,7 @@
-plugins {
-    id 'jjjjava.common'
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
         sourceCompatibility = JavaLanguageVersion.of(8)
         targetCompatibility = JavaLanguageVersion.of(8)
     }
-}
-
-group = 'hsh.demo'
-
-test {
-    useJUnitPlatform()
 }

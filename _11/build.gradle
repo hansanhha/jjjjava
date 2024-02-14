@@ -1,5 +1,5 @@
 plugins {
-    id 'jjjjava.common'
+    id "java"
 }
 
 java {
@@ -10,8 +10,3 @@ java {
     }
 }
 
-group = 'hsh.demo'
-
-test {
-    useJUnitPlatform()
-}

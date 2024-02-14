@@ -1,0 +1,7 @@
+subprojects {
+    apply {
+        plugin "com.hansanhha.java.conventions"
+    }
+
+    group "com.hansanhha.java"
+}
