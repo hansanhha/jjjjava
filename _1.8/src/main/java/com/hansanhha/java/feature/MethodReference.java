@@ -1,8 +1,8 @@
-package hsh.demo.jjjjava.feature;
+package com.hansanhha.java.feature;
 
-import hsh.demo.jjjjava.dummy.Apple;
-import hsh.demo.jjjjava.dummy.Box;
-import hsh.demo.jjjjava.dummy.Fruit;
+import com.hansanhha.java.data.Apple;
+import com.hansanhha.java.data.Box;
+import com.hansanhha.java.data.Fruit;
 
 import java.time.LocalDateTime;
 import java.util.*;

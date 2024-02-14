@@ -1,14 +1,12 @@
-package hsh.demo.jjjjava.feature;
+package com.hansanhha.java.feature;
 
-import hsh.demo.jjjjava.dummy.Apple;
-import hsh.demo.jjjjava.dummy.Box;
-import hsh.demo.jjjjava.dummy.Fruit;
-import hsh.demo.jjjjava.dummy.Orange;
+import com.hansanhha.java.data.Apple;
+import com.hansanhha.java.data.Box;
+import com.hansanhha.java.data.Fruit;
+import com.hansanhha.java.data.Orange;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 

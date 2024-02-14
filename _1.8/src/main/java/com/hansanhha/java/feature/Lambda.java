@@ -1,4 +1,4 @@
-package hsh.demo.jjjjava.feature;
+package com.hansanhha.java.feature;
 
 /*
     참고하기 유용한 문서

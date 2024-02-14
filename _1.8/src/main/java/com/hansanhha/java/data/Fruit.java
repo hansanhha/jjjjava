@@ -1,4 +1,4 @@
-package hsh.demo.jjjjava.dummy;
+package com.hansanhha.java.data;
 
 import java.time.LocalDateTime;
 
