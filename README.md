@@ -1,6 +1,30 @@
 ## JDK 
 
+[OpenJDK](https://github.com/openjdk/jdk)
 [AdoptOpenJDK(Eclipse temurin)](https://adoptium.net/)
+
+## jdk package
+
+**open jdk 기준**
+
+java 패키지 위치 : src/java.base/share/classes
+
+java
+* io
+* lang
+* math
+* net
+* nio
+* security
+* text
+* time
+* util
+
+javax 
+* crypto
+* net 
+* security
+
 
 ## Version
 
